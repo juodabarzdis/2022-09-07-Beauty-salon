@@ -1,0 +1,1 @@
+Beauty salon CRUD app.
