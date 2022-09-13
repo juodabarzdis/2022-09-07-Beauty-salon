@@ -12,6 +12,9 @@ const Saloons = () => {
 
   return (
     <>
+      <div>
+        <h1>Grožio salonai</h1>
+      </div>
       {saloons ? (
         <table className="table">
           <thead>
@@ -24,7 +27,7 @@ const Saloons = () => {
           </thead>
           <tbody>
             {saloons.map((saloon) => (
-              <tr>
+              <tr key={saloon.id}>
                 <td>{saloon.id}</td>
                 <td>{saloon.name}</td>
                 <td>{saloon.address}</td>
