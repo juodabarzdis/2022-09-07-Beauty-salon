@@ -6,7 +6,29 @@ const Router = express.Router();
 
 Router.get("/", async (req, res) => {
   try {
-    const services = await db.Services.findAll();
+    const services = await db.Services.findAll({
+      include: {
+        // include related table
+        model: db.Saloons,
+        attributes: ["name"],
+      },
+    });
+    res.json(services);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Įvyko klaida gaunant duomenis");
+  }
+});
+
+Router.get("/:id", async (req, res) => {
+  try {
+    const services = await db.Services.findByPk(req.params.id, {
+      include: {
+        // include related table
+        model: db.Saloons,
+        attributes: ["name"],
+      },
+    });
     res.json(services);
   } catch (error) {
     console.log(error);

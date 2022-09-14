@@ -1,10 +1,11 @@
-import { useState, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import MainContext from "../../../context/MainContext";
 import Axios from "axios";
 
-const NewSaloon = () => {
+const EditSaloon = () => {
   const { setAlert } = useContext(MainContext);
+  const { id } = useParams();
   const [form, setForm] = useState({
     name: "",
     address: "",
@@ -16,9 +17,18 @@ const NewSaloon = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    Axios.get("/api/saloons/" + id)
+      .then((res) => {
+        console.log(res);
+        setForm(res.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    Axios.post("/api/saloons/new", form)
+    Axios.put("/api/saloons/edit/" + id, form)
       .then((res) => {
         setAlert({
           message: res.data,
@@ -39,7 +49,7 @@ const NewSaloon = () => {
   return (
     <>
       <div className="page-heading mt-4">
-        <h1>Naujas grožio salonas</h1>
+        <h1>Redaguoti grožio saloną</h1>
       </div>
 
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -50,6 +60,7 @@ const NewSaloon = () => {
             name="name"
             className="form-control"
             onChange={handleForm}
+            value={form.name}
           />
         </div>
         <div className="form-group mb-2">
@@ -59,6 +70,7 @@ const NewSaloon = () => {
             name="address"
             className="form-control"
             onChange={handleForm}
+            value={form.address}
           />
         </div>
         <div className="form-group mb-2">
@@ -68,6 +80,7 @@ const NewSaloon = () => {
             name="phone"
             className="form-control"
             onChange={handleForm}
+            value={form.phone}
           />
         </div>
         <button className="btn btn-primary me-2">Išsaugoti</button>
@@ -79,4 +92,4 @@ const NewSaloon = () => {
   );
 };
 
-export default NewSaloon;
+export default EditSaloon;

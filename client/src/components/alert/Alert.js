@@ -1,8 +1,17 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import MainContext from "../../context/MainContext";
 
 const Alert = () => {
-  const { alert } = useContext(MainContext);
+  const { alert, setAlert } = useContext(MainContext);
+
+  useEffect(() => {
+    if (alert.message === "") return;
+    setTimeout(() => {
+      setAlert({
+        message: "",
+      });
+    }, 5000);
+  }, [alert]);
 
   return (
     alert.message && (

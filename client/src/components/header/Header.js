@@ -15,12 +15,22 @@ const Header = () => {
 
           <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 ms-5 justify-content-center mb-md-0">
             <li>
-              <Link to="/" className="nav-link px-2 text-secondary">
+              <Link
+                to="/"
+                className="nav-link px-2 text-white active"
+                role="button"
+                aria-pressed="true"
+              >
                 Pagrindinis
               </Link>
             </li>
             <li>
-              <Link to="/admin" className="nav-link px-2 text-white">
+              <Link
+                to="/admin"
+                className="nav-link px-2 text-white active"
+                role="button"
+                aria-pressed="true"
+              >
                 Administratorius
               </Link>
             </li>
@@ -30,6 +40,19 @@ const Header = () => {
                 className="nav-link px-2 text-white"
               >
                 Naujas gožio salonas
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/admin/services/new/"
+                className="nav-link px-2 text-white"
+              >
+                Nauja paslauga
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/services/" className="nav-link px-2 text-white">
+                Paslaugos
               </Link>
             </li>
           </ul>

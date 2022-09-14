@@ -2,42 +2,47 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 
-const Saloons = () => {
-  const [saloons, setSaloons] = useState([]);
+const Services = () => {
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
-    Axios.get("api/saloons/")
-      .then((res) => setSaloons(res.data))
+    Axios.get("/api/services/")
+      .then((res) => {
+        console.log(res.data);
+        setServices(res.data);
+      })
       .catch((error) => console.log(error));
   }, []);
 
   return (
     <>
       <div className="page-heading mt-4">
-        <h1>Grožio salonai</h1>
+        <h1>Grožio paslaugos</h1>
       </div>
-      {saloons ? (
+      {services ? (
         <table className="table table-striped table-hover">
           <thead>
             <tr>
               <th>#</th>
-              <th>Pavadinimas</th>
-              <th>Adresas</th>
-              <th>Telefono nr.</th>
+              <th>Paslauga</th>
+              <th>Trukmė</th>
+              <th>Kaina</th>
+              <th>Salonas</th>
               <th> </th>
               <th> </th>
             </tr>
           </thead>
           <tbody>
-            {saloons.map((saloon) => (
-              <tr className="align-middle" key={saloon.id}>
-                <td>{saloon.id}</td>
-                <td>{saloon.name}</td>
-                <td>{saloon.address}</td>
-                <td>{saloon.phone}</td>
+            {services.map((service) => (
+              <tr className="align-middle" key={service.id}>
+                <td>{service.id}</td>
+                <td>{service.name}</td>
+                <td>{service.duration}</td>
+                <td>{service.price}</td>
+                <td>{service.saloon.name}</td>
                 <td>
                   <Link
-                    to={"/admin/saloons/edit/" + saloon.id}
+                    to={"/admin/services/edit/" + service.id}
                     className="btn btn-light"
                   >
                     Edit
@@ -45,7 +50,7 @@ const Saloons = () => {
                 </td>
                 <td>
                   <Link
-                    to={"/admin/saloons/delete/" + saloon.id}
+                    to={"/admin/services/delete/" + service.id}
                     className="btn btn-warning"
                   >
                     Delete
@@ -56,10 +61,10 @@ const Saloons = () => {
           </tbody>
         </table>
       ) : (
-        <h3>Nėra sukurtų grožio salonų</h3>
+        <h3>Nėra paslaugų</h3>
       )}
     </>
   );
 };
 
-export default Saloons;
+export default Services;
