@@ -106,8 +106,9 @@ const EditService = () => {
             className="form-control"
             name="saloonId"
             onChange={handleForm}
+            value={form.saloonId }
           >
-            <option value="">Pasirinkite saloną</option>
+    
             {saloons.map((saloon) => (
               <option key={saloon.id} value={saloon.id}>
                 {saloon.name}

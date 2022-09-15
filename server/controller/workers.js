@@ -17,6 +17,18 @@ Router.get("/", async (req, res) => {
   }
 });
 
+Router.get("/single/:id", async (req, res) => {
+  try {
+    const worker = await db.Workers.findByPk(req.params.id, {
+      attributes: ["first_name", "last_name", "photo", "saloonId"],
+    });
+    res.json(worker);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Įvyko klaida gaunant darbuotojų duomenis");
+  }
+});
+
 Router.post(
   "/new",
   upload.single("photo"),
@@ -42,7 +54,6 @@ Router.put(
   async (req, res) => {
     try {
       if (req.file) req.body.photo = "/uploads/" + req.file.filename;
-
       const worker = await db.Workers.findByPk(req.params.id);
       await worker.update(req.body);
       res.send("Darbuotojo duomenys sėkmingai atnaujinti");

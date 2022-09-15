@@ -59,6 +59,7 @@ export const workersValidator = (req, res, next) => {
   const schema = Joi.object({
     first_name: Joi.string().min(2).max(100).required(),
     last_name: Joi.string().min(2).max(100).required(),
+    photo: Joi.string().allow(''),
     saloonId: Joi.number().integer().required(),
   });
   validate(schema, req, res, next);

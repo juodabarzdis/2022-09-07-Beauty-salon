@@ -12,11 +12,11 @@ const DeleteSaloon = () => {
   useEffect(() => {
     Axios.delete("/api/saloons/delete/" + id)
       .then((res) => {
-        navigate("/admin");
-        setAlert({
+          setAlert({
           message: res.data,
           status: "success",
         });
+              navigate("/admin");
       })
       .catch((error) => {
         console.log(error);

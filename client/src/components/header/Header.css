@@ -1,0 +1,20 @@
+ul.nav li {
+  position: relative;
+}
+
+ul.nav li:hover > ul {
+  display: block;
+}
+
+ul.nav li > ul {
+  position: absolute;
+  left: 0;
+  background-color: rgb(33, 37, 41);
+
+  overflow: hidden;
+  display: none;
+}
+
+ul.nav li > ul a:hover {
+  background-color: rgb(33, 37, 22);
+}

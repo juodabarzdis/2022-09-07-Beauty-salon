@@ -13,6 +13,10 @@ import Workers from "./pages/admin/workers/Workers";
 import DeleteSaloon from "./pages/admin/saloons/Delete";
 import EditService from "./pages/admin/services/Edit";
 import DeleteService from "./pages/admin/services/Delete";
+import NewWorker from "./pages/admin/workers/New";
+import EditWorker from "./pages/admin/workers/Edit";
+import DeleteWorker from "./pages/admin/workers/Delete";
+import Orders from "./pages/admin/orders/Orders";
 
 const App = () => {
   const [alert, setAlert] = useState({
@@ -39,6 +43,10 @@ const App = () => {
               <Route path="services/edit/:id" element={<EditService />} />
               <Route path="services/delete/:id" element={<DeleteService />} />
               <Route path="workers" element={<Workers />} />
+              <Route path="workers/new/" element={<NewWorker />} />
+              <Route path="workers/edit/:id" element={<EditWorker />} />
+              <Route path="workers/delete/:id" element={<DeleteWorker />} />
+              <Route path="orders" element={<Orders />} />
             </Route>
           </Routes>
         </div>

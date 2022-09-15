@@ -16,8 +16,11 @@ const Services = () => {
 
   return (
     <>
-      <div className="page-heading mt-4">
+      <div className="page-heading mt-4 d-flex justify-content-between">
         <h1>Grožio paslaugos</h1>
+        <Link to="/admin/services/new" className="btn btn-primary">
+          Pridėti paslaugą
+        </Link>
       </div>
       {services ? (
         <table className="table table-striped table-hover">
@@ -39,7 +42,7 @@ const Services = () => {
                 <td>{service.name}</td>
                 <td>{service.duration}</td>
                 <td>{service.price}</td>
-                <td>{service.saloon.name}</td>
+                <td>{service.saloon?.name}</td>
                 <td>
                   <Link
                     to={"/admin/services/edit/" + service.id}

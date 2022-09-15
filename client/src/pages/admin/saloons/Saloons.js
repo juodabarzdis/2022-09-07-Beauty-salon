@@ -13,8 +13,11 @@ const Saloons = () => {
 
   return (
     <>
-      <div className="page-heading mt-4">
+      <div className="page-heading mt-4 d-flex justify-content-between">
         <h1>Grožio salonai</h1>
+        <Link to="/admin/saloons/new" className="btn btn-primary">
+          Pridėti saloną
+        </Link>
       </div>
       {saloons ? (
         <table className="table table-striped table-hover">

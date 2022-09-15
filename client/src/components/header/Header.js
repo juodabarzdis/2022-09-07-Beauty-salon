@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./Header.css";
 
 const Header = () => {
   return (
@@ -33,27 +34,32 @@ const Header = () => {
               >
                 Administratorius
               </Link>
-            </li>
-            <li>
-              <Link
-                to="/admin/saloons/new/"
-                className="nav-link px-2 text-white"
-              >
-                Naujas gožio salonas
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/admin/services/new/"
-                className="nav-link px-2 text-white"
-              >
-                Nauja paslauga
-              </Link>
-            </li>
-            <li>
-              <Link to="/admin/services/" className="nav-link px-2 text-white">
-                Paslaugos
-              </Link>
+              <ul>
+                <li>
+                  <Link
+                    to="/admin/services/"
+                    className="nav-link px-2 text-white"
+                  >
+                    Paslaugos
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/admin/workers/"
+                    className="nav-link px-2 text-white"
+                  >
+                    Darbuotojai
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/admin/orders/"
+                    className="nav-link px-2 text-white"
+                  >
+                    Užsakymai
+                  </Link>
+                </li>
+              </ul>
             </li>
           </ul>
 
