@@ -8,6 +8,7 @@ const Orders = () => {
   useEffect(() => {
     Axios.get("/api/orders/")
       .then((res) => {
+        console.log(res.data);
         setOrders(res.data);
       })
       .catch((error) => console.log(error));
@@ -24,6 +25,8 @@ const Orders = () => {
             <tr>
               <th>#</th>
               <th>Užsakymo data</th>
+              <th>Klientas</th>
+              <th>Paslauga</th>
               <th>Statusas</th>
               <th></th>
               <th></th>
@@ -35,6 +38,11 @@ const Orders = () => {
                 <td>{order.id}</td>
                 <td>{new Date(order.order_date).toLocaleString("lt-LT")}</td>
                 <td>{order.status ? "Patvirtintas" : "Nepatvirtintas"}</td>
+                <td>
+                  {order.user &&
+                    order.user.first_name + " " + order.user.last_name}
+                </td>
+                <td>{order.service?.name}</td>
                 <td>
                   <Link
                     to={"/admin/orders/edit/" + order.id}

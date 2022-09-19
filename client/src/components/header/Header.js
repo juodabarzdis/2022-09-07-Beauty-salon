@@ -22,7 +22,7 @@ const Header = () => {
                 role="button"
                 aria-pressed="true"
               >
-                Pagrindinis
+                Salonai
               </Link>
             </li>
             <li>

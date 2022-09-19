@@ -8,7 +8,12 @@ const Router = express.Router();
 // Admino užsakymų sąrašas
 Router.get("/", async (req, res) => {
   try {
-    const orders = await db.Orders.findAll();
+    const orders = await db.Orders.findAll({
+      include: [
+        { model: db.Users, attributes: ["first_name", "last_name"] },
+        { model: db.Services, attributes: ["name"] },
+      ],
+    });
     res.json(orders);
   } catch (error) {
     console.log(error);
@@ -39,6 +44,16 @@ Router.post("/new", ordersValidator, async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("Įvyko klaida pridedant paslaugą");
+  }
+});
+
+Router.get("/single/:id", async (req, res) => {
+  try {
+    const order = await db.Orders.findByPk(req.params.id);
+    res.json(order);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Įvyko klaida");
   }
 });
 
