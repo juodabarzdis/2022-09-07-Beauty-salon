@@ -73,9 +73,13 @@ try {
   database.Workers.hasMany(database.Ratings);
   database.Ratings.belongsTo(database.Workers);
 
+  database.Workers.hasMany(database.Orders);
+
+  database.Orders.belongsTo(database.Workers);
+
   // Sync database
 
-  await sequelize.sync({ alter: false });
+  await sequelize.sync({ alter: true });
 } catch {
   console.log("Error connecting to database");
 }

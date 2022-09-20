@@ -21,6 +21,8 @@ import Orders from "./pages/admin/orders/Orders";
 import EditOrder from "./pages/admin/orders/Edit";
 // User pages
 import PublicSaloons from "./pages/Saloons";
+import PublicWorkers from "./pages/Workers";
+import NewOrder from "./pages/NewOrder";
 
 const App = () => {
   const [alert, setAlert] = useState({
@@ -56,6 +58,8 @@ const App = () => {
             </Route>
             {/* User routes */}
             <Route path="/" element={<PublicSaloons />} />
+            <Route path="/workers" element={<PublicWorkers />} />
+            <Route path="/new-order/:saloonId" element={<NewOrder />} />
           </Routes>
         </div>
       </MainContext.Provider>
