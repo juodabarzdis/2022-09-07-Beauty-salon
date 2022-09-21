@@ -5,14 +5,22 @@ import { servicesValidator } from "../middleware/validate.js";
 const Router = express.Router();
 
 Router.get("/", async (req, res) => {
+  const options = {
+    include: {
+      // include related table
+      model: db.Saloons,
+      attributes: ["name"],
+    },
+  };
+
+  if (req.query.saloonId) {
+    options.where = {
+      saloonId: req.query.saloonId,
+    };
+  }
+
   try {
-    const services = await db.Services.findAll({
-      include: {
-        // include related table
-        model: db.Saloons,
-        attributes: ["name"],
-      },
-    });
+    const services = await db.Services.findAll(options);
     res.json(services);
   } catch (error) {
     console.log(error);

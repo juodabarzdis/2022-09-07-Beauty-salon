@@ -37,12 +37,12 @@ const Orders = () => {
               <tr className="align-middle" key={order.id}>
                 <td>{order.id}</td>
                 <td>{new Date(order.order_date).toLocaleString("lt-LT")}</td>
-                <td>{order.status ? "Patvirtintas" : "Nepatvirtintas"}</td>
                 <td>
                   {order.user &&
                     order.user.first_name + " " + order.user.last_name}
                 </td>
                 <td>{order.service?.name}</td>
+                <td>{order.status ? "Patvirtintas" : "Nepatvirtintas"}</td>
                 <td>
                   <Link
                     to={"/admin/orders/edit/" + order.id}

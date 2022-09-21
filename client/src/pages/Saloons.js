@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import Axios from "axios";
 import MainContext from "../context/MainContext";
 
@@ -32,13 +33,19 @@ const Saloons = () => {
         <option value="1">Pagal pavadinimą A-Z</option>
         <option value="2">Pagal pavadinimą Z-A</option>
       </select>
-      {saloons.map((saloon) => (
-        <div key={saloon.id} className="">
-          <h3>{saloon.name}</h3>
-          <p>{saloon.address}</p>
-          <p>{saloon.phone}</p>
-        </div>
-      ))}
+      {saloons &&
+        saloons.map((saloon) => (
+          <div key={saloon.id}>
+            <div className="">
+              <h3>{saloon.name}</h3>
+              <p>{saloon.address}</p>
+              <p>{saloon.phone}</p>
+            </div>
+            <div>
+              <Link to={"/new-order/" + saloon.id}>Rezervuoti laiką</Link>
+            </div>
+          </div>
+        ))}
     </div>
   );
 };
