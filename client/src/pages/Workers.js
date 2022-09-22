@@ -7,28 +7,38 @@ const Workers = () => {
   const [workers, setWorkers] = useState([]);
   const [saloons, setSaloons] = useState([]);
   const [selectedSaloon, setSelectedSaloon] = useState("0");
+  const [selectedSorting, setSelectedSorting] = useState("0");
   const { setAlert } = useContext(MainContext);
 
   useEffect(() => {
-    let url = "/api/workers/";
+    let url = "/api/workers/?";
+
+    const searchParams = new URLSearchParams();
+
     if (selectedSaloon !== "0") {
-      url += "?saloon=" + selectedSaloon;
+      searchParams.append("saloon", selectedSaloon);
     }
+
+    if (selectedSorting !== "0") {
+      searchParams.append("sorting", selectedSorting);
+    }
+
+    url += searchParams.toString();
 
     console.log(url);
     Axios.get(url)
       .then((res) => {
-        // laikinas
-        const workers = res.data.map((worker) => {
-          if (worker.ratings.length > 0) {
-            let sum = 0;
-            worker.ratings.map((r) => (sum += r.rating));
-            worker.total_rating = (sum / worker.ratings.length).toFixed(1);
-          }
+        // laikinas sprendimas
+        // const workers = res.data.map((worker) => {
+        //   if (worker.ratings.length > 0) {
+        //     let sum = 0;
+        //     worker.ratings.map((r) => (sum += r.rating));
+        //     worker.total_rating = (sum / worker.ratings.length).toFixed(1);
+        //   }
 
-          return worker;
-        });
-        setWorkers(workers);
+        //   return worker;
+        // });
+        setWorkers(res.data);
       })
       .catch((err) => {
         setAlert({
@@ -36,7 +46,7 @@ const Workers = () => {
           status: "danger",
         });
       });
-  }, [selectedSaloon]);
+  }, [selectedSaloon, selectedSorting]);
 
   useEffect(() => {
     Axios.get("/api/saloons")
@@ -56,6 +66,10 @@ const Workers = () => {
     setSelectedSaloon(e.target.value);
   };
 
+  const handleSorting = (e) => {
+    setSelectedSorting(e.target.value);
+  };
+
   return (
     <>
       <h1>Darbuotojų sąrašas</h1>
@@ -69,6 +83,11 @@ const Workers = () => {
           ))}
         </select>
       )}
+      <select name="" onChange={handleSorting}>
+        <option value="0">Pasirinkite meistrų rūšiavivmą</option>
+        <option value="1">Didėjančia tvarka </option>
+        <option value="2">Mažėjančia tvarka</option>
+      </select>
       <div className="d-flex ">
         {workers &&
           workers.map((worker) => (
@@ -88,7 +107,9 @@ const Workers = () => {
                 <h4>{worker.first_name + " " + worker.last_name}</h4>
               </div>
               <div>{worker.saloon.name}</div>
-              <div>Įvertinimas: {worker.total_rating}</div>
+              <div>
+                Įvertinimas: {parseFloat(worker.total_rating).toFixed(2)}
+              </div>
             </div>
           ))}
       </div>

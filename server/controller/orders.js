@@ -1,12 +1,12 @@
 import express from "express";
 import db from "../database/connect.js";
-import upload from "../middleware/multer.js";
 import { ordersValidator } from "../middleware/validate.js";
+import { auth, adminAuth } from "../middleware/auth.js";
 
 const Router = express.Router();
 
 // Admino užsakymų sąrašas
-Router.get("/", async (req, res) => {
+Router.get("/", adminAuth, async (req, res) => {
   try {
     const orders = await db.Orders.findAll({
       include: [
@@ -24,14 +24,19 @@ Router.get("/", async (req, res) => {
 // Vartotojo užsakymai
 Router.get("/user/", async (req, res) => {
   // Laikinai darome statinį vartotojo id
-  const userId = 1;
+  const userId = req.session.user.id;
   try {
     const orders = await db.Orders.findAll({
-      where: { userId: userId },
+      where: userId,
       include: [
-        { model: db.Services, include: db.Saloons },
-        { model: db.Workers, include: db.Ratings },
+        {
+          model: db.Services,
+          include: db.Saloons,
+        },
+        db.Workers,
+        db.Ratings,
       ],
+      group: ["id"],
     });
     res.json(orders);
   } catch (error) {
@@ -40,7 +45,7 @@ Router.get("/user/", async (req, res) => {
   }
 });
 
-Router.post("/new", ordersValidator, async (req, res) => {
+Router.post("/new", auth, ordersValidator, async (req, res) => {
   try {
     await db.Orders.create(req.body);
     res.send("Paslauga sėkmingai pridėta");
@@ -50,7 +55,7 @@ Router.post("/new", ordersValidator, async (req, res) => {
   }
 });
 
-Router.get("/single/:id", async (req, res) => {
+Router.get("/single/:id", auth, async (req, res) => {
   try {
     const order = await db.Orders.findByPk(req.params.id);
     res.json(order);
@@ -60,7 +65,7 @@ Router.get("/single/:id", async (req, res) => {
   }
 });
 
-Router.put("/edit/:id", ordersValidator, async (req, res) => {
+Router.put("/edit/:id", adminAuth, ordersValidator, async (req, res) => {
   try {
     const order = await db.Orders.findByPk(req.params.id);
     await order.update(req.body);
@@ -71,7 +76,7 @@ Router.put("/edit/:id", ordersValidator, async (req, res) => {
   }
 });
 
-Router.delete("/delete/:id", async (req, res) => {
+Router.delete("/delete/:id", adminAuth, async (req, res) => {
   try {
     const order = await db.Orders.findByPk(req.params.id);
     await order.destroy();

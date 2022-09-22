@@ -2,6 +2,8 @@ import express from "express";
 import db from "../database/connect.js";
 import upload from "../middleware/multer.js";
 import { workersValidator } from "../middleware/validate.js";
+import { adminAuth } from "../middleware/auth.js";
+import Sequelize from "sequelize";
 
 const Router = express.Router();
 
@@ -12,8 +14,25 @@ Router.get("/", async (req, res) => {
         { model: db.Saloons, attributes: ["name"] },
         { model: db.Ratings, attributes: ["rating"] },
       ],
+      attributes: {
+        include: [
+          [
+            Sequelize.fn("AVG", Sequelize.col("ratings.rating")),
+            "total_rating",
+          ],
+        ],
+      },
+      group: ["id"],
     };
     if (req.query.saloon) options.where = { saloonId: req.query.saloon };
+    if (req.query.sorting) {
+      options.order = [
+        [
+          Sequelize.literal("total_rating"),
+          req.query.sorting === "1" ? "ASC" : "DESC",
+        ],
+      ];
+    }
 
     const workers = await db.Workers.findAll(options);
     res.json(workers);
@@ -23,7 +42,7 @@ Router.get("/", async (req, res) => {
   }
 });
 
-Router.get("/single/:id", async (req, res) => {
+Router.get("/single/:id", adminAuth, async (req, res) => {
   try {
     const worker = await db.Workers.findByPk(req.params.id, {
       attributes: ["first_name", "last_name", "photo", "saloonId"],
@@ -37,6 +56,7 @@ Router.get("/single/:id", async (req, res) => {
 
 Router.post(
   "/new",
+  adminAuth,
   upload.single("photo"),
   workersValidator,
   async (req, res) => {
@@ -55,6 +75,7 @@ Router.post(
 
 Router.put(
   "/edit/:id",
+  adminAuth,
   upload.single("photo"),
   workersValidator,
   async (req, res) => {
@@ -70,7 +91,7 @@ Router.put(
   }
 );
 
-Router.delete("/delete/:id", async (req, res) => {
+Router.delete("/delete/:id", adminAuth, async (req, res) => {
   try {
     const worker = await db.Workers.findByPk(req.params.id);
     await worker.destroy();

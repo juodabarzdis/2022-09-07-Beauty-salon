@@ -6,7 +6,7 @@ import MainContext from "../context/MainContext";
 const Saloons = () => {
   const [saloons, setSaloons] = useState([]);
   const [sort, setSort] = useState("");
-  const { setAlert } = useContext(MainContext);
+  const { setAlert, userInfo } = useContext(MainContext);
 
   useEffect(() => {
     console.log(sort);
@@ -42,7 +42,9 @@ const Saloons = () => {
               <p>{saloon.phone}</p>
             </div>
             <div>
-              <Link to={"/new-order/" + saloon.id}>Rezervuoti laiką</Link>
+              <Link to={userInfo.id ? "/new-order/" + saloon.id : "/login"}>
+                Rezervuoti laiką
+              </Link>
             </div>
           </div>
         ))}

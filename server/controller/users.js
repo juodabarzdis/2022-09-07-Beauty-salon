@@ -46,7 +46,6 @@ router.post("/login", loginValidator, async (req, res) => {
       user.dataValues.password
     );
     if (validPassword) {
-      req.session.loggedIn = true;
       req.session.user = {
         id: user.id,
         email: user.email,
@@ -54,8 +53,11 @@ router.post("/login", loginValidator, async (req, res) => {
         role: user.role,
       };
       console.log(req.session.user);
-      return res.json(req.session.user);
-    } else console.log("Vartotojas prisijungė");
+      return res.json({
+        message: "Vartotojas prisijungė",
+        user: req.session.user,
+      });
+    }
   } catch {
     res.status(500).send("Įvyko klaida");
   }

@@ -5,11 +5,12 @@ import MainContext from "../context/MainContext";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const navigate = useNavigate();
   const { setAlert } = useContext(MainContext);
 
-  const handleRatings = (e, workerId) => {
-    Axios.post("/api/ratings/worker/" + workerId, {
+  const handleRatings = (e, workerId, orderId) => {
+    Axios.post("/api/ratings/worker/" + workerId + "/order/" + orderId, {
       rating: e.target.value,
     })
       .then((res) => {
@@ -17,6 +18,7 @@ const Orders = () => {
           message: res.data,
           status: "success",
         });
+        setRefresh(!refresh);
       })
       .catch((error) => {
         console.log(error);
@@ -46,7 +48,7 @@ const Orders = () => {
           navigate("/login");
         }
       });
-  }, [setAlert]);
+  }, [setAlert, refresh]);
 
   return (
     <>
@@ -76,20 +78,26 @@ const Orders = () => {
                 <td>
                   {order.worker.first_name + " " + order.worker.last_name}
                 </td>
-                <td>{order.status ? "Patvirtintas" : "Nepatvirtintas"}</td>
+                <td>{order.rating ? "Patvirtintas" : "Nepatvirtintas"}</td>
                 <td>
-                  <select
-                    onChange={(e) => handleRatings(e, order.workerId)}
-                    name=""
-                    id=""
-                    key={order.id}
-                  >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
+                  {order.rating ? (
+                    "Jūsų įvertinimas: " + order.rating.rating
+                  ) : (
+                    <select
+                      onChange={(e) =>
+                        handleRatings(e, order.workerId, order.id)
+                      }
+                      name=""
+                      id=""
+                      key={order.id}
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  )}
                 </td>
               </tr>
             ))}

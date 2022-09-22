@@ -31,7 +31,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: false, // only send cookie over https if true
-      maxAge: 6000,
+      maxAge: 60000,
     },
   })
 );

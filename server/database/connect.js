@@ -74,8 +74,10 @@ try {
   database.Ratings.belongsTo(database.Workers);
 
   database.Workers.hasMany(database.Orders);
-
   database.Orders.belongsTo(database.Workers);
+
+  database.Orders.hasOne(database.Ratings);
+  database.Ratings.belongsTo(database.Orders);
 
   // Sync database
 

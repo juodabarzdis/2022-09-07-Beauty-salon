@@ -1,6 +1,7 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Axios from "axios";
 import MainContext from "./context/MainContext";
 // Admmin pages
 import Saloons from "./pages/admin/saloons/Saloons";
@@ -24,14 +25,23 @@ import PublicSaloons from "./pages/Saloons";
 import PublicWorkers from "./pages/Workers";
 import PublicNewOrder from "./pages/NewOrder";
 import PublicOrders from "./pages/Orders";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 const App = () => {
   const [alert, setAlert] = useState({
     message: "",
     status: "",
   });
+  const [userInfo, setUserInfo] = useState({});
+  const contextValues = { alert, setAlert, userInfo, setUserInfo };
 
-  const contextValues = { alert, setAlert };
+  useEffect(() => {
+    Axios.get("/api/users/check-auth").then((res) => {
+      console.log(res.data);
+      setUserInfo(res.data);
+    });
+  }, []);
 
   return (
     <BrowserRouter>
@@ -41,27 +51,40 @@ const App = () => {
           <Alert />
           <Routes>
             {/* Admin routes */}
-            <Route path="admin">
-              <Route index element={<Saloons />} />
-              <Route path="saloons/new/" element={<NewSaloon />} />
-              <Route path="saloons/edit/:id" element={<EditSaloon />} />
-              <Route path="saloons/delete/:id" element={<DeleteSaloon />} />
-              <Route path="services/new/" element={<NewService />} />
-              <Route path="services" element={<Services />} />
-              <Route path="services/edit/:id" element={<EditService />} />
-              <Route path="services/delete/:id" element={<DeleteService />} />
-              <Route path="workers" element={<Workers />} />
-              <Route path="workers/new/" element={<NewWorker />} />
-              <Route path="workers/edit/:id" element={<EditWorker />} />
-              <Route path="workers/delete/:id" element={<DeleteWorker />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="orders/edit/:id" element={<EditOrder />} />
-            </Route>
+            {userInfo.role === 1 && (
+              <Route path="admin">
+                <Route index element={<Saloons />} />
+                <Route path="saloons/new/" element={<NewSaloon />} />
+                <Route path="saloons/edit/:id" element={<EditSaloon />} />
+                <Route path="saloons/delete/:id" element={<DeleteSaloon />} />
+                <Route path="services/new/" element={<NewService />} />
+                <Route path="services" element={<Services />} />
+                <Route path="services/edit/:id" element={<EditService />} />
+                <Route path="services/delete/:id" element={<DeleteService />} />
+                <Route path="workers" element={<Workers />} />
+                <Route path="workers/new/" element={<NewWorker />} />
+                <Route path="workers/edit/:id" element={<EditWorker />} />
+                <Route path="workers/delete/:id" element={<DeleteWorker />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="orders/edit/:id" element={<EditOrder />} />
+              </Route>
+            )}
             {/* User routes */}
             <Route path="/" element={<PublicSaloons />} />
-            <Route path="/workers" element={<PublicWorkers />} />
-            <Route path="/new-order/:saloonId" element={<PublicNewOrder />} />
-            <Route path="/orders" element={<PublicOrders />} />
+            <Route path="workers" element={<PublicWorkers />} />
+            {userInfo.id && (
+              <>
+                <Route
+                  path="new-order/:saloonId"
+                  element={<PublicNewOrder />}
+                />
+                <Route path="orders" element={<PublicOrders />} />
+              </>
+            )}
+
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="*" element={<Login />} />
           </Routes>
         </div>
       </MainContext.Provider>
